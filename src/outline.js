@@ -47,7 +47,8 @@ export const outline = {
             description:
                 'Part 3 introduces common NLP tasks and how to build models for these tasks using AllenNLP.',
             chapterSlugs: [
-                '/coming-soon'
+                '/coming-soon',
+                '/hyperparameter-optimization-with-optuna'
             ],
             icon: 'tools',
             antMenuIcon: 'setting',
