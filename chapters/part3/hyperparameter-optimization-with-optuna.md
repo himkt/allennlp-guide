@@ -12,15 +12,15 @@ In this chapter, we'll give a quick tutorial of hyperparameter optimization for 
 
 <exercise id="1" title="Hyperparameter matters!">
 
-A choice of hyperparameter sometimes has a strong impact to the performance of a model.
+A choice of hyperparameters sometimes has a strong impact to the performance of a model.
 Even if you use the same model, performance could drastically change by the hyperparameters (e.g. learning rate, dimensionality of word embeddings) you use.
 Following figure shows the performance differences with changing hyperparameters.
 <img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_matters.jpg" alt="Hyperparameter matters!" />
 
 The choice of hyperparameters is often based on heuristics of experts, or random search, and may complicate the code.
 <a href="https://optuna.org">Optuna</a> is the library for hyperparameter optimization, which allow users to optimize hyperparameters automatically+easily.
-Various sophisticated algorithms for searching parameters (e.g. Tree-structured Parzen Estimator, CMA Evolution Strategy
-and Multi-objective optimization) and pruning unpromissing trainings (e.g. Successive Having, and Hyperband) are implemented.
+Various sophisticated algorithms for searching parameters such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
+[CMA Evolution Strategy](https://arxiv.org/abs/1604.00772), and pruning unpromissing trainings such as [Hyperband](http://jmlr.org/papers/v18/16-558.html) are implemented.
 
 </exercise>
 
@@ -315,6 +315,8 @@ Next, visualize a history of optimization.
 To plot a history of optimization, we can use `optuna.visualization.plot_optimization_history`.
 I also put a validation accuracy of baseline model as a reference.
 It shows that Optuna successfully find hyperparameters for achieving better performance.
+Note that this figure shows one result of optimizations.
+As the case of baseline, I performed optimization five times with changing random seeds and got the averaged validation accuracy 0.909 (±0.004), which outperforms the baseline with large margine.
 
 ```python
 optuna.visualization.plot_optimization_history(study)
