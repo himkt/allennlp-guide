@@ -1,5 +1,5 @@
 ---
-title: 'Hyperparameter optimization with optuna'
+title: 'Hyperparameter Optimization with Optuna'
 description: "This chapter gives a basic tutorial for optimizing hyperparameters of your model."
 type: chapter
 ---
