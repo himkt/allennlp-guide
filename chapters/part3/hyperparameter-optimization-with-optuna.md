@@ -110,13 +110,11 @@ As the result, the average of validation accuracy was 0.828 (±0.004).
 
 </exercise>
 
-<exercise id="3" title="Preparation for hyperparameter optimization">
+<exercise id="3" title="Masking Hyperparameters for Optuna">
 
 Let's dive into hyperparameter optimization.
 Optuna offers a integration for AllenNLP, named <a href="https://optuna.readthedocs.io/en/stable/reference/integration.html#optuna.integration.AllenNLPExecutor">`AllenNLPExecutor`</a>.
 We can use `AllenNLPExecutor` by following steps: `Masking parameters` and `Defining search space`.
-
-## I: Masking hyperparameters
 
 First, we replace values of hyperparameters with `std.extVar` for tell Optuna what parameters to be optimized.
 Remember that call `std.parseInt` or `std.parseFloat` for numerical parameters.
@@ -220,9 +218,10 @@ local ngram_filter_sizes = std.range(2, max_filter_size);
 ```
 
 </details>
-<br>
 
-## II: Define search space
+</exercise>
+
+<exercise id="4" title="Defining Search Space for Hyperparameters in Pythonic way">
 
 Now that you have created the config, next step is defining search spaces of hyperparameters.
 In Optuna, it defines a search space by creating `objective function`.
@@ -288,7 +287,7 @@ if __name__ == '__main__':
 
 </exercise>
 
-<exercise id="4" title="Results of Hyperparameter Optimization">
+<exercise id="5" title="Results of Hyperparameter Optimization">
 
 If `study.optimize` successfully runs, `trial.db` would be created in the directory `result`.
 [Tips] You can change a names of database file and directory by changing the value of `storage` in `optuna.create_study`.
@@ -349,7 +348,7 @@ If you want to retrain a model with the best hyperparameters, it would be helpfu
 
 </exercise>
 
-<exercise id="5" title="[Advanced] Writing your own script">
+<exercise id="6" title="[Advanced] Writing your own script">
 Additionally, you can use Optuna by writing your own script for creating a model and defining a search space.
 
 You may notice that `AllenNLPPruningCallback` is specified in `epoch_callbacks`, it is our recent work on Optuna x AllenNLP integration.
