@@ -357,3 +357,11 @@ Using `AllenNLPPruningCallback`, you can use efficient pruning algorithms such a
 <codeblock source="part3/optuna/source" setup="part3/optuna/setup"></codeblock>
 
 </exercise>
+
+<exercise id="7" title="Summary">
+
+In this guide, we show a tutorial for hyperparameter optimization using Optuna.
+Optuna integration for AllenNLP allows you to optimize hyperparameters of your model with a few lines of codes.
+If you want to know about Optuna in details, please visit the <a href="https://optuna.readthedocs.io/en/stable/">documentation</a>.
+
+</exercise>
