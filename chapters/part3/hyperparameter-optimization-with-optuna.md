@@ -1,6 +1,6 @@
 ---
 title: 'Hyperparameter Optimization with Optuna'
-description: "This chapter gives a basic tutorial for optimizing hyperparameters of your model."
+description: "This chapter gives a basic tutorial for optimizing the hyperparameters of your model."
 type: chapter
 ---
 
@@ -10,28 +10,28 @@ In this chapter, we'll give a quick tutorial of hyperparameter optimization for 
 
 </textblock>
 
-<exercise id="1" title="Hyperparameter matters!">
+<exercise id="1" title="Hyperparameters matter!">
 
-A choice of hyperparameters sometimes has a strong impact to the performance of a model.
-Even if you use the same model, performance could drastically change by the hyperparameters (e.g. learning rate, dimensionality of word embeddings) you use.
-Following figure shows the performance differences with changing hyperparameters.
-<img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_matters.jpg" alt="Hyperparameter matters!" />
+The choice of hyperparameters often has a strong impact to the performance of a model.
+Even if you use the same model, performance can drastically change depending on the hyperparameters (e.g. learning rate, dimensionality of word embeddings) you use.
+Following figure shows the performance change with different hyperparameters.
+<img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_matters.jpg" alt="Hyperparameters matter!" />
 
 The choice of hyperparameters is often based on heuristics of experts, or random search, and may complicate the code.
-<a href="https://optuna.org">Optuna</a> is the library for hyperparameter optimization, which allow users to optimize hyperparameters automatically+easily.
-Various sophisticated algorithms for searching parameters such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
-[CMA Evolution Strategy](https://arxiv.org/abs/1604.00772), and pruning unpromissing trainings such as [Hyperband](http://jmlr.org/papers/v18/16-558.html) are implemented.
+<a href="https://optuna.org">Optuna</a> is a library for hyperparameter optimization, which allow users to easily optimize hyperparameters automatically.
+Optuna provides sophisticated algorithms for searching parameters, such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
+[CMA Evolution Strategy](https://arxiv.org/abs/1604.00772), as well as algorithms for pruning unpromising trials, such as [Hyperband](http://jmlr.org/papers/v18/16-558.html).
 
 </exercise>
 
 <exercise id="2" title="Building your model">
 
 This tutorial works on sentiment analysis, one kind of text classification.
-We use IMDb review dataset, which contains 20,000 positive/negative reviews for training and 5,000 reviews for validating the performance of model.
-If you haven't read <a href="https://guide.allennlp.org/your-first-model#1">the previous tutorial for text classification</a>, it would help you.
+We use the IMDb review dataset, which contains 20,000 positive/negative reviews for training and 5,000 reviews for validating the performance of model.
+If you haven't read <a href="https://guide.allennlp.org/your-first-model#1">the tutorial for text classification</a>, that may be helpful.
 
-I show a sample configuration of a CNN-based classifier below.
-Note that this model has 6 hyperparameters: `embedding_dim`, `dropout`, `lr`, `max_filter_size`, `num_filters`, and `output_dim`.
+Below is a sample configuration of a CNN-based classifier.
+Note that this model has six hyperparameters: `embedding_dim`, `dropout`, `lr`, `max_filter_size`, `num_filters`, and `output_dim`.
 
 ```json
 // imdb_baseline.jsonnet
@@ -103,9 +103,9 @@ local ngram_filter_sizes = std.range(2, max_filter_size);
 }
 ```
 
-I selected these hyperparameters simply based on the huristics.
+These hyperparameters are selected based on the standard recommendations.
 Of course, we can train this model using AllenNLP CLI.
-I run `allennlp train imdb_baseline.jsonnet` five times with changing random seeds.
+I ran `allennlp train imdb_baseline.jsonnet` five times with random seeds.
 As the result, the average of validation accuracy was 0.828 (±0.004).
 
 Let's dive into hyperparameter optimization.
@@ -115,7 +115,7 @@ We can use `AllenNLPExecutor` by following steps: `Masking parameters` and `Defi
 ## I: Masking Hyperparameters for Optuna
 
 First, we replace values of hyperparameters with `std.extVar` for tell Optuna what parameters to be optimized.
-Remember that call `std.parseInt` or `std.parseFloat` for numerical parameters.
+Remember that `std.parseInt` or `std.parseFloat` are used for numerical parameters.
 
 ### Before
 
@@ -141,7 +141,7 @@ local output_dim = std.parseInt(std.extVar('output_dim'));
 local ngram_filter_sizes = std.range(2, max_filter_size);
 ```
 
-That's all. You can view a final configuration by clicking `details` below.
+That's it. You can view a final configuration by clicking `details` below.
 
 <details>
 <br>
@@ -219,12 +219,12 @@ local ngram_filter_sizes = std.range(2, max_filter_size);
 
 ## II: Defining Search Space for Hyperparameters in Pythonic way
 
-Now that you have created the config, next step is defining search spaces of hyperparameters.
-In Optuna, it defines a search space by creating `objective function`.
-Each search space for hyperparameter is declared by `suggest_int` and `suggest_float`.
-If you want to optimize categorical hyperparameters, you can use `suggest_categorical`.
+Now that you have created the config, the next step is defining the hyperparameter search spaces.
+In Optuna, a search space is defined by creating an `objective function`.
+Each hyperparameter search space is declared with `suggest_int` or `suggest_float`.
+For categorical hyperparameters, you can use `suggest_categorical`.
 Please see <a href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.trial.Trial.html#optuna.trial.Trial">our documentation</a> for more information.
-In this tutorial, I create a objective function like following (Note that the names of hyperparameter should be the same as those defined in the configuration earlier):
+In this tutorial, I create an objective function like following (Note that the names of the hyperparameters should be the same as those defined in the configuration earlier):
 
 ```python
 import optuna
@@ -247,21 +247,21 @@ def objective(trial: optuna.Trial) -> float:
     return executor.run()
 ```
 
-After defining search spaces using `trial.suggest_int` and `trial.suggest_float`, `trial` should be passed to `AllenNLPExecutor`.
-`AllenNLPExecutor` takes three required arguments; `trial` (Optuna's object), `config_file` (path to a model configuration),
+After defining search spaces using `trial.suggest_int` and `trial.suggest_float`, the `trial` object should be passed to `AllenNLPExecutor`.
+`AllenNLPExecutor` takes four required arguments; `trial` (Optuna's object), `config_file` (path to a model configuration),
 `serialization_dir` (directory for saving model snapshot, log, etc.), and `metrics` you want to optimize.
-In above example, we create an instance of `AllenNLPExecutor` as `executor`.
-Once creating `executor`, it starts a training by `executor.run()`.
-In each trial step in optimization, objective is called and does the following steps:
+In the above example, we create an instance of `AllenNLPExecutor` as `executor`.
+Once the `executor` instance is created, training is started with `executor.run()`.
+In each trial step in optimization, the objective function is called and does the following steps:
 
 1. Train a model (`executor.run()`)
-2. Get and return a target metric on validation data (`executor.run()` returns a value of specified metric)
+2. Return a target metric on validation data (`executor.run()` returns the specified metric)
 
 Now, we finished defining objective function. :tada:
-Let's write Optuna stufs for launching optimization!
-In Optuna, we create a study object and pass the objective function to method `optimize()` as follows.
+Let's write Optuna stuff for launching optimization!
+In Optuna, we create a study object and pass the objective function to the `optimize()` method as follows.
 You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (TPESampler is based on Bayesian Optimization),
-direction for optimizing (maximize or minimize), and number of jobs for distributed training, and timeout.
+direction for optimizing (maximize or minimize), number of jobs for distributed training, or timeout.
 
 ```python
 if __name__ == '__main__':
@@ -286,7 +286,7 @@ if __name__ == '__main__':
 <exercise id="3" title="Results of Hyperparameter Optimization">
 
 If `study.optimize` successfully runs, `trial.db` would be created in the directory `result`.
-[Tips] You can change a names of database file and directory by changing the value of `storage` in `optuna.create_study`.
+[Tip] You can change a names of database file and directory by changing the value of `storage` in `optuna.create_study`.
 
 You can see and analyze a result by passing `study` object to various methods implemented in Optuna.
 If you want to separate an analysis from optimization, you can save `study` in storages (e.g. RDB) and load it in another script.
@@ -298,7 +298,7 @@ study = optuna.load_study(
 )
 ```
 
-First of all, let's check results of each trials with a `pandas` dataframe.
+Let's check the results of each trial with a `pandas` dataframe.
 
 ```python
 study.trials_dataframe()
@@ -309,9 +309,9 @@ study.trials_dataframe()
 Next, visualize a history of optimization.
 To plot a history of optimization, we can use `optuna.visualization.plot_optimization_history`.
 I also put a validation accuracy of baseline model as a reference.
-It shows that Optuna successfully find hyperparameters for achieving better performance.
-Note that this figure shows one result of optimizations.
-As the case of baseline, I performed optimization five times with changing random seeds and got the averaged validation accuracy 0.909 (±0.004), which outperforms the baseline with large margine.
+It shows that Optuna successfully found hyperparameters to achieve better performance.
+Note that this figure shows one result of optimization.
+For the baseline, I performed optimization five times with random seeds and got an average validation accuracy of 0.909 (±0.004), which outperforms the baseline by a large margin.
 
 ```python
 optuna.visualization.plot_optimization_history(study)
@@ -321,14 +321,14 @@ optuna.visualization.plot_optimization_history(study)
 <img src="/part3/hyperparameter-optimization-with-optuna/optimization_history.jpg" alt="Plot Optimization History" />
 
 From the recent release of Optuna, we can evaluate parameter importances based on finished trials.
-There are two evaluators available: [fANOVA](http://proceedings.mlr.press/v32/hutter14.html) and [MDI](https://papers.nips.cc/paper/4928-understanding-variable-importances-in-forests-of-randomized-trees).
+There are two evaluators available: the default [fANOVA](http://proceedings.mlr.press/v32/hutter14.html) and [MDI](https://papers.nips.cc/paper/4928-understanding-variable-importances-in-forests-of-randomized-trees).
 To show importances of hyperparameters, it uses `optuna.visualization.plot_param_importances`:
 
 ```python
 optuna.visualization.plot_param_importances(study)
 ```
 
-In this plot, we can see that `lr` is the most important in this experiment.
+In this plot, we can see that `lr` is the most important hyperparameter in this experiment.
 
 <br>
 <img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_importance.jpg" alt="Plot Hyperparameter Importance" />
@@ -340,7 +340,7 @@ dump_best_config("./imdb_optuna.jsonnet", "./best_config.json", study)
 ```
 
 It will create a configuration named `best_config.json`.
-If you want to retrain a model with the best hyperparameters, it would be helpful.
+This is helpful to retrain a model with the best hyperparameters.
 
 </exercise>
 
@@ -356,8 +356,7 @@ Using `AllenNLPPruningCallback`, you can use efficient pruning algorithms such a
 
 <exercise id="5" title="Summary">
 
-In this guide, we show a tutorial for hyperparameter optimization using Optuna.
-Optuna integration for AllenNLP allows you to optimize hyperparameters of your model with a few lines of codes.
-If you want to know about Optuna in details, please visit the <a href="https://optuna.readthedocs.io/en/stable/">documentation</a>.
+That concludes this guide on how to use Optuna for hyperparameter optimization. Hopefully you've learned how to define AllenNLP hyperparameter search space using Optuna, run the trials for optimization, and then use the results with just a few lines of code.
+For more details about Optuna, please see the <a href="https://optuna.org/">Optuna website</a> or <a href="https://optuna.readthedocs.io/en/stable/">Optuna documentation</a>.
 
 </exercise>
