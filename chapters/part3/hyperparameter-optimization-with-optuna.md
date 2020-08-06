@@ -26,7 +26,7 @@ Optuna provides sophisticated algorithms for searching parameters, such as [Tree
 
 <exercise id="2" title="Building your model">
 
-This tutorial works on sentiment analysis, one kind of text classification.
+This tutorial works on sentiment analysis, a kind of text classification.
 We use the IMDb review dataset, which contains 20,000 positive/negative reviews for training and 5,000 reviews for validating the performance of model.
 If you haven't read <a href="https://guide.allennlp.org/your-first-model#1">the tutorial for text classification</a>, that may be helpful.
 
