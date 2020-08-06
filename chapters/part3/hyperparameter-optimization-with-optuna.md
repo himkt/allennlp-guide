@@ -227,7 +227,11 @@ In Optuna, a search space is defined by creating an `objective function`.
 Each hyperparameter search space is declared with `suggest_int` or `suggest_float`.
 For categorical hyperparameters, you can use `suggest_categorical`.
 Please see <a href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.trial.Trial.html#optuna.trial.Trial">Optuna documentation</a> for more information.
-In this tutorial, I create an objective function like following (Note that the names of the hyperparameters should be the same as those defined in the configuration earlier):
+
+These suggest functions require two kinds of arguments at least.
+The first one is the name of hyperparameter, and the second one is the range of the values.
+Note that the names of the hyperparameters should be the same as those defined in the configuration earlier.
+A typical objective function looks like following:
 
 ```python
 import optuna
