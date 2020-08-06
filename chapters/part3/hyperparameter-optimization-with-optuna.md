@@ -17,8 +17,11 @@ Even if you use the same model, performance can drastically change depending on 
 Following figure shows the performance change with different hyperparameters.
 <img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_matters.jpg" alt="Hyperparameters matter!" />
 
-The choice of hyperparameters is often based on heuristics of experts, or random search, and may complicate the code.
-<a href="https://optuna.org">Optuna</a> is a library for hyperparameter optimization, which allow users to easily optimize hyperparameters automatically.
+A typical process of typical hyperparameter optimization is based on repeating a step of training and evaluating a model.
+People just repeat this cycle for every hours or even days for finding good hyperparameters.
+<img src="/part3/hyperparameter-optimization-with-optuna/what_is_hyperparameter_optimization.jpg" alt="What is hyperparameter optimization" />
+
+<a href="https://optuna.org">Optuna</a> is a library, which allow users to easily optimize hyperparameters automatically.
 Optuna provides sophisticated algorithms for searching parameters, such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
 [CMA Evolution Strategy](https://arxiv.org/abs/1604.00772), as well as algorithms for pruning unpromising trials, such as [Hyperband](http://jmlr.org/papers/v18/16-558.html).
 
