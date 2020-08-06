@@ -255,6 +255,7 @@ def objective(trial: optuna.Trial) -> float:
 ```
 
 After defining search spaces using `trial.suggest_int` and `trial.suggest_float`, the `trial` object should be passed to `AllenNLPExecutor`.
+The `trial` object holds all suggested values after defining search spaces using `trial.suggest_int` and `trial.suggest_float`,  and it should be pass to `AllenNLPExecutor`.
 `AllenNLPExecutor` takes four required arguments; `trial` (Optuna's object), `config_file` (path to a model configuration),
 `serialization_dir` (directory for saving model snapshot, log, etc.), and `metrics` you want to optimize.
 In the above example, we create an instance of `AllenNLPExecutor` as `executor`.
