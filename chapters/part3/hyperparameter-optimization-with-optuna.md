@@ -108,7 +108,7 @@ local ngram_filter_sizes = std.range(2, max_filter_size);
 
 These hyperparameters are selected based on the standard recommendations.
 Of course, we can train this model using AllenNLP CLI.
-I ran `allennlp train imdb_baseline.jsonnet` five times with random seeds.
+I ran `allennlp train imdb_baseline.jsonnet` five times with different random seeds.
 As the result, the average of validation accuracy was 0.828 (±0.004).
 
 Let's dive into hyperparameter optimization.
@@ -314,7 +314,7 @@ To plot a history of optimization, we can use `optuna.visualization.plot_optimiz
 I also put a validation accuracy of baseline model as a reference.
 It shows that Optuna successfully found hyperparameters to achieve better performance.
 Note that this figure shows one result of optimization.
-For the baseline, I performed optimization five times with random seeds and got an average validation accuracy of 0.909 (±0.004), which outperforms the baseline by a large margin.
+For the baseline, I performed optimization five times with different random seeds and got an average validation accuracy of 0.909 (±0.004), which outperforms the baseline by a large margin.
 
 ```python
 optuna.visualization.plot_optimization_history(study)
