@@ -113,11 +113,11 @@ As the result, the average of validation accuracy was 0.828 (±0.004).
 
 Let's dive into hyperparameter optimization.
 Optuna offers a integration for AllenNLP, named <a href="https://optuna.readthedocs.io/en/stable/reference/integration.html#optuna.integration.AllenNLPExecutor">`AllenNLPExecutor`</a>.
-We can use `AllenNLPExecutor` by following steps: `Masking parameters` and `Defining search space`.
+We can use `AllenNLPExecutor` by following steps: `Telling Optuna's hyperparameters` and `Defining search space`.
 
-## I: Masking Hyperparameters for Optuna
+## I: Telling Optuna’s Hyperparameters
 
-First, we replace values of hyperparameters with `std.extVar` for tell Optuna what parameters to be optimized.
+First, we replace values of hyperparameters with `std.extVar` to tell Optuna what parameters to be optimized.
 Remember that `std.parseInt` or `std.parseFloat` are used for numerical parameters.
 
 ### Before
