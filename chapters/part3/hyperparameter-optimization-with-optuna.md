@@ -371,7 +371,7 @@ a pruner evaluates at each epoch how promising each trial will be and stops if i
 
 You can use `AllenNLPPruningCallback` that is the new feature of Optuna, which allows users to prune unpromising trials with algorithms implemented in Optuna.
 `AllenNLPPruningCallback` is the interface to provide the way to use these pruning algorithms in `GradientDescentTrainer`, which is the standard way to train a model in AllenNLP.
-To enable a pruning, you must create the AllenNLP callback first. `AllenNLPPruningCallback` needs two arguments: `trial` and a target metric.
+To enable a pruning, you must create the AllenNLP callback first. `AllenNLPPruningCallback` needs two arguments: a trial and a target metric.
 In this example, we watch `validation_accuracy` for the metric to determine if a trial should be pruned or not.
 Note that `patience` is set to `None` since pruning and built-in early stopping could conflict.
 
