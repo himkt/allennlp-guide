@@ -118,7 +118,7 @@ We can use `AllenNLPExecutor` by following steps: `Telling Optuna's hyperparamet
 ## I: Telling Optuna’s Hyperparameters
 
 First, we replace values of hyperparameters with `std.extVar` to tell Optuna what parameters to be optimized.
-Remember that `std.parseInt` or `std.parseFloat` are used for numerical parameters.
+Remember that `std.parseInt` or `std.parseJson` are used for numerical parameters.
 
 ### Before
 
