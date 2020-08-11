@@ -268,7 +268,7 @@ In each trial step in optimization, the objective function is called and does th
 Now, we finished defining objective function.
 Let's write Optuna stuff for launching optimization!
 In Optuna, we create a study object and pass the objective function to the `optimize()` method as follows.
-You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (TPESampler is based on Bayesian Optimization),
+You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (`TPESampler` is based on Bayesian Optimization),
 direction for optimizing (maximize or minimize), number of jobs for distributed training, or timeout.
 
 ```python
