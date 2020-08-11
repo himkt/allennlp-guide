@@ -17,12 +17,12 @@ Even if you use the same model, performance can drastically change depending on 
 Following figure shows the performance change with different hyperparameters.
 <img src="/part3/hyperparameter-optimization-with-optuna/hyperparameter_matters.jpg" alt="Hyperparameters matter!" />
 
-A typical process of typical hyperparameter optimization is based on repeating a step of training and evaluating a model.
+A typical process of hyperparameter optimization is based on repeating a step of training/evaluating a model.
 People just repeat this cycle for every hours or even days for finding good hyperparameters.
 <img src="/part3/hyperparameter-optimization-with-optuna/what_is_hyperparameter_optimization.jpg" alt="What is hyperparameter optimization" />
 
-<a href="https://optuna.org">Optuna</a> is a library, which allow users to easily optimize hyperparameters automatically.
-Optuna provides sophisticated algorithms for searching parameters, such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
+<a href="https://optuna.org">Optuna</a> is a library, which allows users to optimize hyperparameters automatically.
+Optuna provides sophisticated algorithms for searching hyperparameters, such as [Tree-structured Parzen Estimator](https://papers.nips.cc/paper/4443-algorithms-for-hyper-parameter-optimization) and
 [CMA Evolution Strategy](https://arxiv.org/abs/1604.00772), as well as algorithms for pruning unpromising trials, such as [Hyperband](http://jmlr.org/papers/v18/16-558.html).
 
 </exercise>
@@ -30,7 +30,7 @@ Optuna provides sophisticated algorithms for searching parameters, such as [Tree
 <exercise id="2" title="Building your model">
 
 This tutorial works on sentiment analysis, one kind of text classification.
-We use the [IMDb review dataset](https://ai.stanford.edu/~amaas/data/sentiment), which contains 20,000 positive/negative reviews for training and 5,000 reviews for validating the performance of model.
+We use the [IMDb review dataset](https://ai.stanford.edu/~amaas/data/sentiment), which contains 20,000 positive or negative reviews for training and 5,000 reviews for validating the performance of model.
 If you haven't read <a href="https://guide.allennlp.org/your-first-model#1">the tutorial for text classification</a>, that may be helpful.
 
 Below is a sample configuration of a CNN-based classifier.
@@ -219,6 +219,7 @@ local ngram_filter_sizes = std.range(2, max_filter_size);
 ```
 
 </details>
+<br>
 
 ## II: Defining Search Space for Hyperparameters in Pythonic way
 
@@ -268,7 +269,7 @@ In each trial step in optimization, the objective function is called and does th
 Now, we finished defining objective function.
 Let's write Optuna stuff for launching optimization!
 In Optuna, we create a study object and pass the objective function to the `optimize()` method as follows.
-You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (TPESampler is based on Bayesian Optimization),
+You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (`TPESampler` is based on Bayesian Optimization),
 direction for optimizing (maximize or minimize), number of jobs for distributed training, or timeout.
 
 ```python
@@ -294,6 +295,7 @@ if __name__ == '__main__':
 <exercise id="3" title="Results of Hyperparameter Optimization">
 
 If `study.optimize` successfully runs, `trial.db` would be created in the directory `result`.
+
 [Tip] You can change a names of database file and directory by changing the value of `storage` in `optuna.create_study`.
 
 You can see and analyze a result by passing `study` object to various methods implemented in Optuna.
@@ -306,7 +308,7 @@ study = optuna.load_study(
 )
 ```
 
-Let's check the results of each trial with a `pandas` dataframe.
+Let's check the results of trials with a `pandas` dataframe.
 
 ```python
 study.trials_dataframe()
@@ -319,7 +321,7 @@ To plot a history of optimization, we can use `optuna.visualization.plot_optimiz
 I also put a validation accuracy of baseline model as a reference.
 It shows that Optuna successfully found hyperparameters to achieve better performance.
 Note that this figure shows one result of optimization.
-For the baseline, I performed optimization five times with different random seeds and got an average validation accuracy of 0.909 (±0.002), which outperforms the baseline by a large margin.
+I performed optimization five times with different random seeds and got the average validation accuracy of 0.909 (±0.002), which outperforms the baseline by a large margin.
 
 ```python
 optuna.visualization.plot_optimization_history(study)
@@ -354,15 +356,16 @@ This is helpful to retrain a model with the best hyperparameters.
 
 <exercise id="4" title="Writing your own script with Optuna and Use Pruners">
 
-Additionally, you can also use Optuna when you define the AllenNLP model by writing your script.
+Additionally, you can use Optuna when you define the AllenNLP model by writing your script.
 A python code of training a model with AllenNLP typically consists of main three parts: preparing data, building model, and creating trainer.
+In this section, we show the example of AllenNLP+Optuna with writing Python script.
 <!-- We put the python code to use AllenNLP+Optuna at the bottom of this exercise. -->
 
 ## Pruning unpromising trials
 
-Hyperparameter optimization often takes a long time to find good parameters.
+Hyperparameter optimization often takes a long time to find good hyperparameters.
 If you can find and stop unpromising trials with bad hyperparameters, you can reduce the time of optimization and get good hyperparameters faster.
-Stopping unpromising trials is so-called pruning.
+Stopping unpromising trials is so-called `pruning`.
 The following illustration shows an example of pruning.
 Although the final curves at the left side of the picture are not available before finishing hyperparameter optimization,
 a pruner evaluates at each epoch how promising each trial will be and stops if it predicts to be unpromising.
@@ -371,9 +374,10 @@ a pruner evaluates at each epoch how promising each trial will be and stops if i
 
 You can use `AllenNLPPruningCallback` that is the new feature of Optuna, which allows users to prune unpromising trials with algorithms implemented in Optuna.
 `AllenNLPPruningCallback` is the interface to provide the way to use these pruning algorithms in `GradientDescentTrainer`, which is the standard way to train a model in AllenNLP.
-To enable a pruning, you must create the AllenNLP callback first. `AllenNLPPruningCallback` needs two arguments: `trial` and a target metric.
-In this example, we watch `validation_accuracy` for the metric to determine if a trial should be pruned or not.
+To enable a pruning, you must create the AllenNLP callback first. `AllenNLPPruningCallback` needs two arguments: `trial` and `monitor` (target metric).
+In this example, we use `validation_accuracy` for the metric to determine if a trial should be pruned or not.
 Note that `patience` is set to `None` since pruning and built-in early stopping could conflict.
+The objective function looks like following:
 
 ```python
     def objective(trial):
