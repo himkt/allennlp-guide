@@ -265,7 +265,7 @@ In each trial step in optimization, the objective function is called and does th
 1. Train a model (`executor.run()`)
 2. Return a target metric on validation data (`executor.run()` returns the specified metric)
 
-Now, we finished defining objective function. :tada:
+Now, we finished defining objective function.
 Let's write Optuna stuff for launching optimization!
 In Optuna, we create a study object and pass the objective function to the `optimize()` method as follows.
 You can specify something; a way to save a result of optimization, a sampler for searching hyperparameters (TPESampler is based on Bayesian Optimization),
